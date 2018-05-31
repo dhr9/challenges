@@ -7,7 +7,7 @@ def checkIfTrue(n):
 	n_ = getReverse(n)
 	if n*M == n_:
 		print("We have a winner")
-		print(n)
+		print(str(M) + " => " + str(n))
 		import sys
 		sys.exit(0)
 	return (n_/n)
@@ -67,19 +67,28 @@ def getNextNum(num, i, start):
 	temp = num*M
 	return (temp%(10**i))*10 + start
 
+def try2():
+	num_arr = list(range(1,10))
 
-num_arr = list(range(1,10))
+	i = 1
+	while(True):
+		# print(num_arr)
+		for j in range(len(num_arr)):
+			num_arr[j] = getNextNum(num_arr[j], i, j+1)
+			checkIfTrue(num_arr[j])
+		i+=1
 
-i = 1
-while(True):
-	print(num_arr)
-	for j in range(len(num_arr)):
-		num_arr[j] = getNextNum(num_arr[j], i, j+1)
-		checkIfTrue(num_arr[j])
-	i+=1
+try2()
 
-# num2 = num*5
-# num = int(str(num2%10) + str(num))
 
-# print(num)
-# print(num*5)
+'''
+1 => 11
+2 => 105263157894736842
+3 => 1034482758620689655172413793
+4 => 102564
+5 => 142857
+6 => 1016949152542372881355932203389830508474576271186440677966
+7 => 1014492753623188405797
+8 => 1012658227848
+9 => 10112359550561797752808988764044943820224719
+'''
