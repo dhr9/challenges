@@ -30,6 +30,7 @@ def nextBreak(n):
 	return(10**(len(str(n)))+10)
 
 def try1():
+	global l
 	reset = 0
 	l = {}
 	lastLength = 0
@@ -59,3 +60,4 @@ def try1():
 		inc(k)
 		i+=1
 
+try1()
