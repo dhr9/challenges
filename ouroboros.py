@@ -29,31 +29,33 @@ def inc(n):
 def nextBreak(n):
 	return(10**(len(str(n)))+10)
 
-reset = 0
-l = {}
-lastLength = 0
+def try1():
+	reset = 0
+	l = {}
+	lastLength = 0
 
-START = 10**4
-END = 10**6
+	START = 10
+	END = 10**6
 
 
-i = START
-while (i < END):
-	k = int(checkIfTrue(i))
-	if(k==reset):
-		# print(i)
-		p = getL()
-		length = int(len(p)/2)
-		if(length > lastLength):
-			print(str(length) + " => " + str(i))
-		if(length < M):
-			i = nextBreak(i)
-		lastLength = length
-		print(p)
-		l = {}
-		reset = M
-	if(k == 1):
-		reset = 0
-	# print(k)
-	inc(k)
-	i+=1
+	i = START
+	while (i < END):
+		k = int(checkIfTrue(i))
+		if(k==reset):
+			# print(i)
+			p = getL()
+			length = int(len(p)/2)
+			if(length > lastLength):
+				print(str(length) + " => " + str(i))
+			if(length < M):
+				i = nextBreak(i)
+			lastLength = length
+			print(p)
+			l = {}
+			reset = M
+		if(k == 1):
+			reset = 0
+		# print(k)
+		inc(k)
+		i+=1
+
