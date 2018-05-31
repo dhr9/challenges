@@ -1,4 +1,4 @@
-M = 5
+M = 6
 
 def getReverse(n):
 	return int(str(n)[-1] + str(n)[:-1])
@@ -60,4 +60,26 @@ def try1():
 		inc(k)
 		i+=1
 
-try1()
+142857
+
+def getNextNum(num, i, start):
+	# print(num, i, start)
+	temp = num*M
+	return (temp%(10**i))*10 + start
+
+
+num_arr = list(range(1,10))
+
+i = 1
+while(True):
+	print(num_arr)
+	for j in range(len(num_arr)):
+		num_arr[j] = getNextNum(num_arr[j], i, j+1)
+		checkIfTrue(num_arr[j])
+	i+=1
+
+# num2 = num*5
+# num = int(str(num2%10) + str(num))
+
+# print(num)
+# print(num*5)
