@@ -16,8 +16,11 @@ class KillerSudokuSolver:
         def recurse(sum_, num,  max_number):
             assert sum_ > 0 and num > 0
 
-            # cached values already available
-            # TODO(riyansh)
+            # TODO(riyansh): hashing triples the runtime, figure out why
+            # if cached values already available, return cached value
+            # hash = str(sum_) + '-' + str(num) + '-' + str(max_number)
+            # if hash in self._factors_cache:
+            #     return self._factors_cache[hash]
 
             # only one number to fill the sum
             if num == 1:
@@ -34,15 +37,8 @@ class KillerSudokuSolver:
             # if _sum == 1:
             #     return None
 
-            # -----------------------------------------------------
-            # this case handled when if _available_numbers[i] == 1:
-            # -----------------------------------------------------
-            # no numbers available
-            # if self.__are_no_numbers_available(_available_numbers):
-            #     return None
-
             # determine the max number to start the search with
-            max_search_number = max_number
+            max_search_number = max_number if sum_ > max_number else sum_ - 1
 
             # determine the min number to stop the search at
             # for example, starting at 9, you should end at 5
@@ -53,7 +49,6 @@ class KillerSudokuSolver:
             # list of all possible solutions
             possible_solutions = []
 
-            # TODO(riyansh): optimize, maybe use sorted hash table as above
             for i in range(max_search_number, min_search_number-1, -1):
                 remaining_solutions = recurse(sum_ - i, num - 1, i-1)
 
@@ -75,8 +70,10 @@ class KillerSudokuSolver:
                         
             # empty solutions list means no solutions
             if not possible_solutions:
-                return None
+                possible_solutions = None
 
+            # TODO(riyansh): hashing triples the runtime, figure out why
+            # self._factors_cache[hash] = possible_solutions
             return possible_solutions
 
         return recurse(sum_, num, 9)
@@ -85,6 +82,7 @@ def factorize_time(n, num_factors, N):
     ks = KillerSudokuSolver()
     ts = time()
     for i in range(N):
+        ks._factors_cache = {}
         ks.get_factors(n, num_factors)
     te = time()
     print((te - ts) * 1000000.0 / N, "us")
@@ -110,8 +108,6 @@ def find_most_difficult_factorization():
     print(max_box)
     print(max_num_factors)
     print(max_factors)
-
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='factorize a number into `n` unique numbers from 1 to 9')
