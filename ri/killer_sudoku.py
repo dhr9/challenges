@@ -13,8 +13,8 @@ class KillerSudokuSolver:
         assert _sum > 0 and _num > 0
 
         # TODO(riyansh): Maybe use sorted hash table
-        if _available_numbers == None:
-            _available_numbers = [1 for i in range(10)]
+        if _available_numbers is None:
+            _available_numbers = [1 for _ in range(10)]
             _available_numbers[0] = 0
 
         def recurse(_sum, _num, _available_numbers):
@@ -31,22 +31,26 @@ class KillerSudokuSolver:
                 else:
                     return None
 
+            # --------------------------------------------------
+            # this case handled when max_search_number = sum - 1
+            # --------------------------------------------------
             # sum is 1, but more than 1 numbers need to add up to 1
-            if _sum == 1:
-                return None
+            # if _sum == 1:
+            #     return None
 
+            # -----------------------------------------------------
+            # this case handled when if _available_numbers[i] == 1:
+            # -----------------------------------------------------
             # no numbers available
-            if self.__are_no_numbers_available(_available_numbers):
-                return None
+            # if self.__are_no_numbers_available(_available_numbers):
+            #     return None
 
             # determine the max number to start the search with
             # if _sum < 9, then _sum - 1
             # (_sum - 1 because there are atleast 2 numbers that need to 
             # add up to sum (_num > 1))
             # if not, then 9
-            max_search_number = 9
-            if _sum < 9:
-                max_search_number = _sum - 1
+            max_search_number = _sum - 1 if _sum < 9 else 9
 
             # list of all possible solutions
             possible_solutions = []
@@ -77,7 +81,7 @@ class KillerSudokuSolver:
                         
             # empty solutions list means no solutions
             if not possible_solutions:
-                possible_solutions = None
+                return None
 
             return possible_solutions
 
@@ -90,6 +94,30 @@ def factorize_time(n, num_factors, N):
         ks.get_factors(n, num_factors)
     te = time()
     print((te - ts) * 1000.0 / N, "ms")
+    print(ks.get_factors(n, num_factors))
+
+def find_most_difficult_factorization():
+    ks = KillerSudokuSolver()
+    max_num_factors = 0
+    max_sum = 0
+    max_box = 0
+    max_factors = []
+    for sum_ in range(1, (45*9) + 1):
+        for box in range(1, 91):
+            factors = ks.get_factors(sum_, box)
+            if factors is None: continue
+            if len(factors) > max_num_factors:
+                max_num_factors = len(factors)
+                max_sum = sum_
+                max_box = box
+                max_factors = factors
+
+    print(max_sum)
+    print(max_box)
+    print(max_num_factors)
+    print(max_factors)
+
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='factorize a number into `n` unique numbers from 1 to 9')
@@ -100,13 +128,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
     ks = KillerSudokuSolver()
 
-    # factorize a number
+    # time the factorize function
     factorize_time(args.n, args.num_factors, args.N)
-
-    # if factors == None:
-    #     print('No factors available :(')
-    # else:
-    #     for factor in factors:
-    #         for element in factor:
-    #             print(element, end = ' ')
-    #         print()
