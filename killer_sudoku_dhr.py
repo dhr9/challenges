@@ -1,12 +1,6 @@
-def is_valid(k):
-    k.sort()
-    for i in range(len(k)-1):
-        if(k[i]==k[i+1]):
-            return False
-    return True
-
-def get_combinations(number, boxes):
+def get_combinations(number, boxes, l=[], start=1):
     def fl_append(fl, newL):
+        # newL.sort()
         fl[str(newL)] = newL
 
     def dict_to_list(d):
@@ -14,35 +8,42 @@ def get_combinations(number, boxes):
         for key in d.keys():
             l.append(d[key])
         return l
+    
+    def check_if_in_l(l, n):
+        return n in l
 
     mid = int(number/2)
     if(mid*2 == number):
         mid -= 1
     final_l = {}
-    for i in range(1, mid+1):
-        if(i > 9):
+    # print(number, boxes, l,"--",list(range(start, mid+1)))
+    for i in range(start, mid+1):
+        if(i > 9 or check_if_in_l(l,i)):
             continue
         if(boxes == 2):
-            if(number-i > 9):
+            if(number-i > 9 or check_if_in_l(l, number-i)):
                 continue
-            j = [i, number-i]
-            if(is_valid(j)):
-                fl_append(final_l, j)
+            j = l.copy()
+            j.append(i)
+            j.append(number-i)
+            fl_append(final_l, j)
         else:
-            for comb in get_combinations(number-i, boxes-1):
-                comb.append(i)
-                if(is_valid(comb)):    
-                    fl_append(final_l, comb)
+            j = l.copy()
+            j.append(i)
+            for comb in get_combinations(number-i, boxes-1, j, i+1):
+                # comb.append(i)
+                fl_append(final_l, comb)
     # print(number, boxes, "==>",dict_to_list(final_l),"\n")
     return dict_to_list(final_l)
 
-from time import time
 
-N = 100
-start = time()
-for i in range(N):
-    c = get_combinations(30,4)
-print(((time()-start)/N)*1000, "ms")
-# print(c)
-# c = get_combinations(10,4)
-# print(c)
+
+def time_it(N = 10000):
+    from time import time
+
+    start = time()
+    for i in range(N):
+        c = get_combinations(20,4)
+    print(((time()-start)/N)*1000, "ms")
+
+time_it()
